@@ -1,3 +1,10 @@
 # ipsofactoPro.github.io
-2025_12_12-To start on creating your next website, It needs github.io. My site is ipsofacto.pro is already verified in GitHub Organization : https://github.com/ipsofactoPro/
-This repo is public
+
+This repository hosts the default GitHub Pages site for the **ipsofactoPro** organization.
+
+It is not the main website.  
+The official site for the project and identity anchor is:
+
+👉 http://ipsofacto.pro
+
+The domain **ipsofacto.pro** is verified at the organization level in GitHub.
