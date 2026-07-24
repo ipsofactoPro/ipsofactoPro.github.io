@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-	<link rel="icon" type="image/png" href="favicon.png">  
+    <link rel="icon" type="image/png" href="favicon.png">  
     <meta charset="utf-8">
     <title>ipsofacto.pro</title>
     <style>
@@ -50,6 +50,46 @@
         color: #888;
         letter-spacing: 0.5px;
       }
+
+      /* Simple form styling */
+      .contact-form {
+        margin: 40px auto;
+        max-width: 400px;
+        text-align: left;
+      }
+
+      .contact-form label {
+        display: block;
+        margin-top: 15px;
+        font-size: 14px;
+        color: #333;
+      }
+
+      .contact-form input,
+      .contact-form textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+      }
+
+      .contact-form button {
+        margin-top: 20px;
+        width: 100%;
+        padding: 12px;
+        background: #333;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      .contact-form button:hover {
+        background: #555;
+      }
     </style>
   </head>
 
@@ -64,11 +104,30 @@
       <p>Temporary homepage — Elevate customization in progress.</p>
     </div>
 
+    <!-- ✅ CONTACT FORM INSERTED HERE -->
+    <form action="/contact" method="POST" class="contact-form">
+
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="telephone">Telephone</label>
+      <input type="tel" id="telephone" name="telephone" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="4" required></textarea>
+
+      <button type="submit">Send</button>
+    </form>
+    <!-- END CONTACT FORM -->
+
     <footer>
       <p>This domain hosts my digital creation environment and technical works.</p>
       <p>Active licensed tools: AVID Pro Tools, Autodesk applications, Microsoft Office.</p>
       <p>This is the GitHub organization for ipsofacto.pro.<br>
-     Visit the main site at <a href="https://ipsofacto.pro">ipsofacto.pro</a>.
+      Visit the main site at <a href="https://ipsofacto.pro">ipsofacto.pro</a>.
       <p>Last updated: 17 June 2026</p>
     </footer>
 
