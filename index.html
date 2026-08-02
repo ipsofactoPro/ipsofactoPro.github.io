@@ -176,7 +176,8 @@
     {
       method: "POST",
       body: formData,
-      mode: "cors"
+      mode: "cors"                               //This forces Chrome and Edge to accept the CORS response.
+      headers: { "Accept": "application/json" } // This forces Chrome/Edge to treat the response as JSON
     }
   );
 
