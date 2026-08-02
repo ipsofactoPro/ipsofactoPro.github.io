@@ -1,4 +1,29 @@
 <!DOCTYPE html>
+ <script>
+document.querySelector('.contact-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const formData = new FormData(form);
+
+  const response = await fetch('/contact', {
+    method: 'POST',
+    body: formData
+  });
+
+  const result = await response.json();
+
+  if (result.ok) {
+    const confirmation = document.createElement('div');
+    confirmation.className = 'confirmation-message';
+    confirmation.textContent = 'Your message has been sent successfully.';
+    form.insertAdjacentElement('beforebegin', confirmation);
+
+    form.reset();
+  }
+});
+</script>
+
 <html>
   <head>
     <link rel="icon" type="image/png" href="favicon.png">  
@@ -128,31 +153,7 @@
     </form>
     <!-- END CONTACT FORM -->
     
- <script>
-document.querySelector('.contact-form').addEventListener('submit', async function(e) {
-  e.preventDefault();
-
-  const form = e.target;
-  const formData = new FormData(form);
-
-  const response = await fetch('/contact', {
-    method: 'POST',
-    body: formData
-  });
-
-  const result = await response.json();
-
-  if (result.ok) {
-    const confirmation = document.createElement('div');
-    confirmation.className = 'confirmation-message';
-    confirmation.textContent = 'Your message has been sent successfully.';
-    form.insertAdjacentElement('beforebegin', confirmation);
-
-    form.reset();
-  }
-});
-</script>
-    
+   
  <footer>
   <p>This domain hosts my digital creation environment and technical works.</p>
   <p>Active licensed tools: AVID Pro Tools, Autodesk applications, Microsoft Office.</p>
