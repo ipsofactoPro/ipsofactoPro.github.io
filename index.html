@@ -151,28 +151,29 @@
   © 2026 ipsofacto.pro — Professional identity anchor for digital works.
 </div>
        <script>
-            document.querySelector('.contact-form').addEventListener('submit', async function(e) {
-              e.preventDefault();
+document.querySelector('.contact-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
 
-              const form = e.target;
-              const formData = new FormData(form);
+  const form = e.target;
+  const formData = new FormData(form);
 
-              const response = await fetch('/contact', {
-              method: 'POST',
-              body: formData
-              });
+  const response = await fetch('https://ipsofacto-pro-contact.ipsofacto.workers.dev/contact', {
+    method: 'POST',
+    body: formData
+  });
 
-              const result = await response.json();
+  const result = await response.json();
 
-              if (result.ok) {
-              const confirmation = document.createElement('div');
-          confirmation.className = 'confirmation-message';
-          confirmation.textContent = 'Your message has been sent successfully.';
-          form.insertAdjacentElement('beforebegin', confirmation);
+  if (result.ok) {
+    const confirmation = document.createElement('div');
+    confirmation.className = 'confirmation-message';
+    confirmation.textContent = 'Your message has been sent successfully.';
+    form.insertAdjacentElement('beforebegin', confirmation);
 
-          form.reset();
-          }
-          });
-      </script>
+    form.reset();
+  }
+});
+</script>
+
   </body>
 </html>
