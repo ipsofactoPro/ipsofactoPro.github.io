@@ -1,236 +1,178 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>ipsofacto.pro · Professional identity anchor</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Professional identity anchor for digital works of Luciano.">
-  <link rel="canonical" href="https://ipsofacto.pro">
-  <link rel="stylesheet" href="styles.css">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="ipsofacto.pro">
-  <meta property="og:description" content="Professional identity anchor for digital works of Luciano.">
-  <meta property="og:url" content="https://ipsofacto.pro">
-</head>
-<body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <div class="brand">
-        <span class="brand-title">ipsofacto.pro</span>
-        <span class="brand-subtitle">Professional identity anchor</span>
-      </div>
-      <nav class="site-nav" aria-label="Primary">
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-        <a href="#tools">Licensed tools</a>
-        <a href="#infrastructure">Infrastructure</a>
-        <a href="#org">GitHub org</a>
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <section id="hero" class="hero">
-      <div class="container hero-inner">
-        <div class="hero-text">
-          <h1>Official professional workspace of Luciano</h1>
-          <p>
-            This site serves as a stable, identity‑anchored surface for my digital works,
-            infrastructure, and professional communication.
-          </p>
-           <img src="identity.jpg" alt="Identity Symbol">
-          <p class="hero-note">
-            Temporary homepage — elevated customization in progress.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section id="about" class="section">
-      <div class="container">
-        <h2>Scope and jurisdiction</h2>
-        <p>
-          ipsofacto.pro is operated from Switzerland and aligned with Swiss and EU‑compatible
-          regulatory expectations. It is designed as a long‑term anchor for identity,
-          infrastructure, and professional contact.
-        </p>
-      </div>
-    </section>
-
-    <section id="contact" class="section section-alt">
-      <div class="container contact-grid">
-        <div>
-          <h2>Contact</h2>
-          <p>
-            Use the form to reach me for professional inquiries. Messages are processed through
-            a dedicated mail infrastructure and identity‑anchored backend.
-          </p>
-          <p class="contact-meta">
-            Primary mailbox: <strong>...@ipsofacto.pro</strong><br>
-            Delivery: Microsoft 365 Exchange Online Plan 1
-          </p>
-        </div>
-
-        <form id="contact-form" class="contact-form" novalidate>
-          <div class="form-row">
-            <label for="name">Name</label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              required
-              autocomplete="name"
-              aria-label="Your full name">
-          </div>
-
-          <div class="form-row">
-            <label for="telephone">Telephone</label>
-            <input
-              id="telephone"
-              name="telephone"
-              type="tel"
-              autocomplete="tel"
-              aria-label="Your telephone number">
-          </div>
-
-          <div class="form-row">
-            <label for="email">Email</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              autocomplete="email"
-              aria-label="Your email address">
-          </div>
-
-          <div class="form-row">
-            <label for="message">Message</label>
-            <textarea
-              id="message"
-              name="message"
-              rows="5"
-              required
-              aria-label="Your message"></textarea>
-          </div>
-
-          <button type="submit" class="btn-primary">Send message</button>
-          <div id="form-status" class="form-status" role="alert" aria-live="polite"></div>
-        </form>
-      </div>
-    </section>
-
-    <section id="tools" class="section">
-      <div class="container">
-        <h2>Licensed tools and environment</h2>
-        <p>
-          My work relies on a curated set of licensed tools and platforms, including
-          professional audio software, identity and access management, and cloud‑based
-          infrastructure services.
-        </p>
-        <ul class="list-inline">
-          <li>Microsoft 365 (Exchange Online)</li>
-          <li>Cloudflare (DNS, Workers)</li>
-          <li>GitHub (source control, Pages)</li>
-          <li>Professional audio plug‑ins and DAWs</li>
-        </ul>
-      </div>
-    </section>
-
-    <section id="infrastructure" class="section section-alt">
-      <div class="container">
-        <h2>Infrastructure and authentication</h2>
-        <p>
-          Email delivery and domain identity are protected by SPF, DKIM, and DMARC policies
-          aligned with ipsofacto.pro. Routing and API surfaces are anchored via Cloudflare
-          Workers and DNS.
-        </p>
-        <ul>
-          <li>SPF, DKIM, DMARC configured for <strong>ipsofacto.pro</strong></li>
-          <li>Cloudflare Workers for contact form processing</li>
-          <li>GitHub Pages for static frontend hosting</li>
-        </ul>
-      </div>
-    </section>
-
-    <section id="org" class="section">
-      <div class="container">
-        <h2>GitHub organization</h2>
-        <p>
-          Source code and infrastructure‑adjacent projects are maintained under the
-          <strong>ipsofactoPro</strong> GitHub organization.
-        </p>
-        <p>
-          <a href="https://github.com/ipsofactoPro" class="link-accent">
-            View GitHub organization
-          </a>
-        </p>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p>&copy; <span id="year"></span> ipsofacto.pro · Luciano</p>
-      <p class="footer-meta">
-        Identity‑anchored professional workspace · Switzerland · Swiss/EU‑compatible expectations
-      </p>
-    </div>
-  </footer>
-
-  <script>
-    // Dynamic year
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Contact form submission
-    const form = document.getElementById('contact-form');
-    const statusEl = document.getElementById('form-status');
-
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      statusEl.textContent = '';
-      const submitBtn = form.querySelector('button[type="submit"]');
-      submitBtn.disabled = true;
-
-      const payload = {
-        name: form.name.value.trim(),
-        telephone: form.telephone.value.trim(),
-        email: form.email.value.trim(),
-        message: form.message.value.trim()
-      };
-
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 8000);
-
-      try {
-        const response = await fetch('/contact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-          signal: controller.signal
-        });
-
-        clearTimeout(timeout);
-
-        if (!response.ok) {
-          throw new Error('Delivery failed');
-        }
-
-        const data = await response.json().catch(() => ({}));
-        statusEl.textContent = data.message || 'Message sent successfully.';
-        statusEl.classList.remove('status-error');
-        statusEl.classList.add('status-success');
-        form.reset();
-      } catch (error) {
-        clearTimeout(timeout);
-        statusEl.textContent = 'Unable to send message at the moment. Please try again later.';
-        statusEl.classList.remove('status-success');
-        statusEl.classList.add('status-error');
-      } finally {
-        submitBtn.disabled = false;
+<html>
+  <head>
+    <link rel="icon" type="image/png" href="favicon.png">  
+    <link rel="stylesheet" href="confirm.css">
+    <meta charset="utf-8">
+    <title>ipsofacto.pro</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 0;
+        padding: 40px;
+        background: linear-gradient(180deg, #e8ecf2 0%, #ffffff 100%);
       }
-    });
-  </script>
-</body>
+
+      img {
+        max-width: 500px;
+        margin-top: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      }
+
+      h1 {
+        margin-top: 20px;
+        font-size: 32px;
+        color: #222;
+      }
+
+      p {
+        font-size: 18px;
+        color: #444;
+      }
+
+      .identity {
+        margin-top: 20px;
+        font-size: 16px;
+        color: #555;
+      }
+
+      footer {
+        margin-top: 50px;
+        font-size: 14px;
+        color: #666;
+        line-height: 1.6;
+      }
+
+      .signature {
+        margin-top: 30px;
+        font-size: 13px;
+        color: #888;
+        letter-spacing: 0.5px;
+      }
+
+      /* Simple form styling */
+      .contact-form {
+        margin: 40px auto;
+        max-width: 400px;
+        text-align: left;
+      }
+
+      .contact-form label {
+        display: block;
+        margin-top: 15px;
+        font-size: 14px;
+        color: #333;
+      }
+
+      .contact-form input,
+      .contact-form textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+      }
+
+      .contact-form button {
+        margin-top: 20px;
+        width: 100%;
+        padding: 12px;
+        background: #333;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      .contact-form button:hover {
+        background: #555;
+      }
+    </style>
+    
+  </head>
+
+  <body>
+    <h1>Welcome to ipsofacto.pro</h1>
+    <p>This private section marks the beginning of the public one.</p>
+
+    <img src="identity.jpg" alt="Identity Symbol">
+
+    <div class="identity">
+      <p>Official professional workspace of Luciano.</p>
+      <p>Temporary homepage — Elevate customization in progress.</p>
+    </div>
+
+      <!-- ⭐ CONTACT FORM TITLE -->
+  <h2 class="contact-title">If you have a question for us, contact us.</h2>
+
+    <!-- ✅ CONTACT FORM INSERTED HERE -->
+    <form action="/contact" method="POST" class="contact-form">
+
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="telephone">Telephone</label>
+      <input type="tel" id="telephone" name="telephone" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="4" required></textarea>
+
+      <button type="submit">Send</button>
+    </form>
+    <!-- END CONTACT FORM -->
+    
+  
+ <footer>
+  <p>This domain hosts my digital creation environment and technical works.</p>
+  <p>Active licensed tools: AVID Pro Tools, Autodesk applications, Microsoft Office.</p>
+
+  <p><strong>Infrastructure & Jurisdiction</strong><br>
+  Ipsofacto.Pro operates on a dedicated Microsoft Exchange Online Plan 1 subscription,
+  provisioned and billed through Microsoft (Schweiz) GmbH, The Circle 02, 8058 Zürich‑Flughafen,
+  Switzerland (VAT: CHE‑110.088.994 MWST). This configuration ensures that all communication is
+  processed under Swiss and EU data‑protection standards, with enterprise‑grade reliability and
+  authenticated domain identity (DKIM, SPF, DMARC). Messages are handled within a secure,
+  jurisdiction‑aligned environment designed for long‑term stability and professional continuity.</p>
+
+  <p>This is the GitHub organization for ipsofacto.pro.<br>
+  Visit the main site at <a href="https://ipsofacto.pro">ipsofacto.pro</a>.</p>
+
+  <p>Last updated: 01 August 2026</p>
+</footer>
+
+<div class="signature">
+  © 2026 ipsofacto.pro — Professional identity anchor for digital works.
+</div>
+       <script>
+            document.querySelector('.contact-form').addEventListener('submit', async function(e) {
+              e.preventDefault();
+
+              const form = e.target;
+              const formData = new FormData(form);
+
+              const response = await fetch('/contact', {
+              method: 'POST',
+              body: formData
+              });
+
+              const result = await response.json();
+
+              if (result.ok) {
+              const confirmation = document.createElement('div');
+          confirmation.className = 'confirmation-message';
+          confirmation.textContent = 'Your message has been sent successfully.';
+          form.insertAdjacentElement('beforebegin', confirmation);
+
+          form.reset();
+          }
+          });
+      </script>
+  </body>
 </html>
