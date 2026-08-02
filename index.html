@@ -91,6 +91,32 @@
         background: #555;
       }
     </style>
+    
+    <script>
+document.querySelector('.contact-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const formData = new FormData(form);
+
+  const response = await fetch('/contact', {
+    method: 'POST',
+    body: formData
+  });
+
+  const result = await response.json();
+
+  if (result.ok) {
+    const confirmation = document.createElement('div');
+    confirmation.className = 'confirmation-message';
+    confirmation.textContent = 'Your message has been sent successfully.';
+    form.insertAdjacentElement('beforebegin', confirmation);
+
+    form.reset();
+  }
+});
+</script>
+
   </head>
 
   <body>
