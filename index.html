@@ -157,7 +157,7 @@ document.querySelector('.contact-form').addEventListener('submit', async functio
   const form = e.target;
   const formData = new FormData(form);
 
-  const response = await fetch('https://ipsofacto-pro-contact.ipsofacto.workers.dev/contact', {
+  const response = await fetch('https://ipsofacto-pro-contact.lucianocircelli.workers.dev/contact', {
     method: 'POST',
     body: formData
   });
