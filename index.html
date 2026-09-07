@@ -1,56 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-	<link rel="icon" type="image/png" href="favicon.png">  
+    <link rel="icon" type="image/png" href="favicon.png">  
+    <link rel="stylesheet" href="styles.css">
     <meta charset="utf-8">
     <title>ipsofacto.pro</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-        margin: 0;
-        padding: 40px;
-        background: linear-gradient(180deg, #e8ecf2 0%, #ffffff 100%);
-      }
-
-      img {
-        max-width: 500px;
-        margin-top: 30px;
-        border-radius: 8px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-      }
-
-      h1 {
-        margin-top: 20px;
-        font-size: 32px;
-        color: #222;
-      }
-
-      p {
-        font-size: 18px;
-        color: #444;
-      }
-
-      .identity {
-        margin-top: 20px;
-        font-size: 16px;
-        color: #555;
-      }
-
-      footer {
-        margin-top: 50px;
-        font-size: 14px;
-        color: #666;
-        line-height: 1.6;
-      }
-
-      .signature {
-        margin-top: 30px;
-        font-size: 13px;
-        color: #888;
-        letter-spacing: 0.5px;
-      }
-    </style>
+       
   </head>
 
   <body>
@@ -64,16 +19,79 @@
       <p>Temporary homepage — Elevate customization in progress.</p>
     </div>
 
-    <footer>
-      <p>This domain hosts my digital creation environment and technical works.</p>
-      <p>Active licensed tools: AVID Pro Tools, Autodesk applications, Microsoft Office.</p>
-      <p>This is the GitHub organization for ipsofacto.pro.<br>
-     Visit the main site at <a href="https://ipsofacto.pro">ipsofacto.pro</a>.
-      <p>Last updated: 17 June 2026</p>
-    </footer>
+      <!-- ⭐ CONTACT FORM TITLE -->
+  <h2 class="contact-title">If you have a question for us, contact us.</h2>
 
-    <div class="signature">
-      © 2026 ipsofacto.pro — Professional identity anchor for digital works.
-    </div>
+    <!-- ✅ CONTACT FORM INSERTED HERE -->
+    <form action="/contact" method="POST" class="contact-form">
+
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="telephone">Telephone</label>
+      <input type="tel" id="telephone" name="telephone" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="4" required></textarea>
+
+      <button type="submit">Send</button>
+    </form>
+    <!-- END CONTACT FORM -->
+    
+  
+ <footer>
+  <p>This domain hosts my digital creation environment and technical works.</p>
+  <p>Active licensed tools: AVID Pro Tools, Autodesk applications, Microsoft Office.</p>
+
+  <p><strong>Infrastructure & Jurisdiction</strong><br>
+  Ipsofacto.Pro operates on a dedicated Microsoft Exchange Online Plan 1 subscription,
+  provisioned and billed through Microsoft (Schweiz) GmbH, The Circle 02, 8058 Zürich‑Flughafen,
+  Switzerland (VAT: CHE‑110.088.994 MWST). This configuration ensures that all communication is
+  processed under Swiss and EU data‑protection standards, with enterprise‑grade reliability and
+  authenticated domain identity (DKIM, SPF, DMARC). Messages are handled within a secure,
+  jurisdiction‑aligned environment designed for long‑term stability and professional continuity.</p>
+
+  <p>This is the GitHub organization for ipsofacto.pro.<br>
+  Visit the main site at <a href="https://ipsofacto.pro">ipsofacto.pro</a>.</p>
+
+  <p>Last updated: 01 August 2026</p>
+</footer>
+
+<div class="signature">
+  © 2026 ipsofacto.pro — Professional identity anchor for digital works.
+</div>
+   <script>
+   document.querySelector('.contact-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+
+    const response = await fetch(
+    "https://ipsofacto-pro-contact.lucianocircelli.workers.dev/contact",
+    {
+      method: "POST",
+      body: formData,
+      mode: "cors",                               //This forces Chrome and Edge to accept the CORS response.
+      headers: { "Accept": "application/json" } // This forces Chrome/Edge to treat the response as JSON
+    }
+  );
+
+    const result = await response.json();
+
+  if (result.ok) {
+    const confirmation = document.createElement('div');
+    confirmation.className = 'confirmation-message';
+    confirmation.textContent = 'Your message has been sent successfully.';
+    form.insertAdjacentElement('beforebegin', confirmation);
+  }
+
+  form.reset();
+});
+</script>
+
   </body>
 </html>
