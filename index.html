@@ -9,6 +9,7 @@
     <link rel="canonical" href="https://ipsofacto.pro/">
     <title>Ipsofacto.pro — Identity‑Anchored Digital Workspace</title>
     <meta name="description" content="ipsofacto.pro is a stable, identity‑anchored environment integrating Cloudflare, GitHub Pages, and Microsoft 365.">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   </head>
   <body>
     <main id="main-content">
@@ -36,6 +37,7 @@
       <label for="message">Message</label>
       <textarea id="message" name="message" rows="4" maxlength="5000" required></textarea>
 
+      <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY"></div>
       <button type="submit" id="contact-submit">Send</button>
       <p id="form-status" role="status" aria-live="polite"></p>
     </form>
@@ -70,12 +72,19 @@
           event.preventDefault();
           if (!form.reportValidity()) return;
 
+          const formData = new FormData(form);
+          if (!formData.get('cf-turnstile-response')) {
+            status.textContent = 'Please complete the security check.';
+            status.className = 'status-error';
+            return;
+          }
+
           button.disabled = true;
           status.textContent = 'Sending…';
           status.className = '';
 
-          const payload = Object.fromEntries(new FormData(form).entries());
           try {
+            const payload = Object.fromEntries(formData.entries());
             const response = await fetch(endpoint, {
               method: 'POST',
               mode: 'cors',
@@ -98,6 +107,7 @@
             status.textContent = error.message || 'A network error occurred. Please try again later.';
             status.className = 'status-error';
           } finally {
+            if (window.turnstile) window.turnstile.reset();
             button.disabled = false;
           }
         });

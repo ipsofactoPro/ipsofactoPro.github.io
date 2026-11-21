@@ -2,6 +2,7 @@ const ALLOWED_ORIGIN = 'https://ipsofacto.pro';
 const NOTIFICATION_RECIPIENT = 'contact@ipsofacto.pro';
 const TOKEN_TTL_SECONDS = 24 * 60 * 60;
 const MAX_BODY_BYTES = 12_000;
+const RETENTION_SECONDS = 30 * 24 * 60 * 60;
 
 export default {
   async fetch(request, env) {
@@ -30,12 +31,12 @@ async function handleContact(request, env) {
   if (!contentType.toLowerCase().includes('application/json')) {
     return json(request, { ok: false, error: 'Send the form as JSON.' }, 415);
   }
-  const length = Number(request.headers.get('content-length') || 0);
-  if (length > MAX_BODY_BYTES) return json(request, { ok: false, error: 'Request is too large.' }, 413);
 
   let input;
   try {
-    input = await request.json();
+    const body = await request.arrayBuffer();
+    if (body.byteLength > MAX_BODY_BYTES) return json(request, { ok: false, error: 'Request is too large.' }, 413);
+    input = JSON.parse(new TextDecoder().decode(body));
   } catch {
     return json(request, { ok: false, error: 'Invalid request body.' }, 400);
   }
@@ -50,6 +51,21 @@ async function handleContact(request, env) {
     return json(request, { ok: false, error: 'Please provide a valid name, telephone, email, and message.' }, 400);
   }
 
+  const turnstileToken = cleanString(input?.['cf-turnstile-response'], 2048);
+  if (!turnstileToken) {
+    return json(request, { ok: false, error: 'Please complete the security check.' }, 400);
+  }
+  let turnstileValid;
+  try {
+    turnstileValid = await verifyTurnstile(turnstileToken, request, env);
+  } catch (error) {
+    console.error('Turnstile verification service unavailable', error);
+    return json(request, { ok: false, error: 'Security verification is temporarily unavailable. Please try again.' }, 503);
+  }
+  if (!turnstileValid) {
+    return json(request, { ok: false, error: 'Security verification failed. Please try again.' }, 400);
+  }
+
   const token = randomToken();
   const tokenHash = await sha256Hex(token);
   const id = crypto.randomUUID();
@@ -60,7 +76,7 @@ async function handleContact(request, env) {
     await env.DB.prepare(`INSERT INTO contact_requests
       (id, name, telephone, email, message, token_hash, status, created_at, expires_at, notification_status)
       VALUES (?, ?, ?, ?, ?, ?, 'pending', ?, ?, 'not_applicable')`)
-      .bind(id, data.name, data.telephone, data.email, tokenHash, now, expiresAt)
+      .bind(id, data.name, data.telephone, data.email, data.message, tokenHash, now, expiresAt)
       .run();
   } catch (error) {
     console.error('Unable to store contact request', error);
@@ -82,6 +98,25 @@ async function handleContact(request, env) {
   }
 
   return json(request, { ok: true }, 202);
+}
+
+async function verifyTurnstile(token, request, env) {
+  if (!env.TURNSTILE_SECRET_KEY) throw new Error('Turnstile secret is not configured.');
+  const body = new URLSearchParams({
+    secret: env.TURNSTILE_SECRET_KEY,
+    response: token
+  });
+  const remoteIp = request.headers.get('CF-Connecting-IP');
+  if (remoteIp) body.set('remoteip', remoteIp);
+
+  const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body
+  });
+  if (!response.ok) throw new Error(`Turnstile returned HTTP ${response.status}.`);
+  const result = await response.json();
+  return result.success === true && (!result.hostname || result.hostname === 'ipsofacto.pro');
 }
 
 function confirmationPage(token) {
@@ -115,7 +150,7 @@ async function confirmRequest(request, env) {
   let updated;
   try {
     updated = await env.DB.prepare(`UPDATE contact_requests
-      SET status = 'confirmed', confirmed_at = ?, notification_status = 'pending'
+      SET status = 'confirmed', token_hash = NULL, confirmed_at = ?, notification_status = 'pending'
       WHERE token_hash = ? AND status = 'pending' AND expires_at > ?
       RETURNING id`)
       .bind(now, tokenHash, now).all();
@@ -129,13 +164,12 @@ async function confirmRequest(request, env) {
     return htmlPage('Link unavailable', 'This link is invalid, expired, or has already been used. No new notification was sent.', 410);
   }
 
-  // Confirmation is recorded before notification. If email delivery fails, the scheduled retry will send it.
   try {
     await sendNotification(env, row.id);
   } catch (error) {
     console.error('Contact notification deferred to scheduled retry', error);
   }
-  return htmlPage('Email confirmed', 'Your email is confirmed and your message has been sent to ipsofacto.pro. Thank you.');
+  return htmlPage('Email confirmed', 'Your email is confirmed. Your message is queued for delivery to ipsofacto.pro. Thank you.');
 }
 
 async function sendNotification(env, id) {
@@ -170,6 +204,11 @@ async function expireAndRetryNotifications(env) {
       console.error('Notification retry failed', row.id, error);
     }
   }
+
+  const retentionCutoff = now - RETENTION_SECONDS;
+  await env.DB.prepare(`DELETE FROM contact_requests
+    WHERE status IN ('expired', 'email_failed') AND created_at <= ?`)
+    .bind(retentionCutoff).run();
 }
 
 async function sendEmail(env, message, idempotencyKey) {
